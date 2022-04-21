@@ -20,7 +20,7 @@ class ComponentData with ChangeNotifier {
   /// Component type to distinguish components.
   ///
   /// You can use it for example to distinguish what [data] type this component has.
-  final String? type;
+  final String type;
 
   /// This value determines if this component will be above or under other components.
   /// Higher value means on the top.
@@ -30,7 +30,7 @@ class ComponentData with ChangeNotifier {
   ///
   /// Use for hierarchical components.
   /// Functions such as [moveComponentWithChildren] work with this property.
-  String? parentId;
+  String parentId = '';
 
   /// List of children of this component.
   ///
@@ -53,7 +53,7 @@ class ComponentData with ChangeNotifier {
     this.position = Offset.zero,
     this.size = const Size(80, 80),
     this.minSize = const Size(4, 4),
-    this.type,
+    this.type = '',
     this.data,
   })  : assert(minSize <= size),
         id = id ?? const Uuid().v4();
