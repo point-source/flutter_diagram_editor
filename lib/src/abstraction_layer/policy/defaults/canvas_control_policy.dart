@@ -127,39 +127,7 @@ mixin CanvasControlPolicy on BasePolicySet {
 /// Feel free to override other functions from [CanvasPolicy] and add them to [PolicySet].
 mixin CanvasMovePolicy on BasePolicySet implements CanvasControlPolicy {
   @override
-  AnimationController? _animationController;
-
-  @override
-  Offset _basePosition = const Offset(0, 0);
-
-  @override
-  Offset _lastFocalPoint = const Offset(0, 0);
-
-  @override
-  Offset transformPosition = const Offset(0, 0);
-  @override
-  double transformScale = 1.0;
-
-  @override
-  bool canUpdateCanvasModel = false;
-
-  @override
-  getAnimationController() {
-    return _animationController;
-  }
-
-  @override
-  setAnimationController(AnimationController animationController) {
-    _animationController = animationController;
-  }
-
-  @override
-  disposeAnimationController() {
-    _animationController?.dispose();
-  }
-
-  @override
-  onCanvasScaleStart(ScaleStartDetails details) {
+  void onCanvasScaleStart(ScaleStartDetails details) {
     _basePosition = canvasReader.state.position;
 
     _lastFocalPoint = details.focalPoint;
