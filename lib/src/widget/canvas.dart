@@ -25,27 +25,26 @@ class DiagramEditorCanvas extends StatefulWidget {
 
 class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
     with TickerProviderStateMixin {
-  PolicySet? withControlPolicy;
+  CanvasControlPolicy? get withControlPolicy =>
+      widget.policy is CanvasControlPolicy
+          ? widget.policy as CanvasControlPolicy
+          : null;
 
   @override
   void initState() {
-    withControlPolicy = (widget.policy is CanvasControlPolicy ||
-            widget.policy is CanvasMovePolicy)
-        ? widget.policy
-        : null;
-
-    (withControlPolicy as CanvasControlPolicy?)?.setAnimationController(
+    withControlPolicy?.setAnimationController(
       AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
       ),
     );
+
     super.initState();
   }
 
   @override
   void dispose() {
-    (withControlPolicy as CanvasControlPolicy?)?.disposeAnimationController();
+    withControlPolicy?.disposeAnimationController();
     super.dispose();
   }
 
