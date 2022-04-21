@@ -236,7 +236,7 @@ mixin ComponentWriter on ModelWriter {
   bool _checkParentChildLoop(String componentId, String parentId) {
     if (componentId == parentId) return false;
     final _parentIdOfParent = _canvasModel.getComponent(parentId).parentId;
-    if (_parentIdOfParent != null) {
+    if (_parentIdOfParent.isNotEmpty) {
       return _checkParentChildLoop(componentId, _parentIdOfParent);
     }
 
@@ -250,7 +250,7 @@ mixin ComponentWriter on ModelWriter {
     assert(_canvasModel.componentExists(componentId),
         'model does not contain this component id: $componentId');
     final _parentId = _canvasModel.getComponent(componentId).parentId;
-    if (_parentId != null) {
+    if (_parentId.isNotEmpty) {
       _canvasModel.getComponent(componentId).removeParent();
       _canvasModel.getComponent(_parentId).removeChild(componentId);
     }
