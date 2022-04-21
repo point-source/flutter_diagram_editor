@@ -25,22 +25,22 @@ mixin CanvasControlPolicy on BasePolicySet {
     return _animationController;
   }
 
-  setAnimationController(AnimationController animationController) {
+  void setAnimationController(AnimationController animationController) {
     _animationController = animationController;
   }
 
-  disposeAnimationController() {
+  void disposeAnimationController() {
     _animationController?.dispose();
   }
 
-  onCanvasScaleStart(ScaleStartDetails details) {
+  void onCanvasScaleStart(ScaleStartDetails details) {
     _baseScale = canvasReader.state.scale;
     _basePosition = canvasReader.state.position;
 
     _lastFocalPoint = details.focalPoint;
   }
 
-  onCanvasScaleUpdate(ScaleUpdateDetails details) {
+  void onCanvasScaleUpdate(ScaleUpdateDetails details) {
     if (canUpdateCanvasModel) {
       _animationController?.repeat();
       _updateCanvasModelWithLastValues();
@@ -61,7 +61,7 @@ mixin CanvasControlPolicy on BasePolicySet {
     }
   }
 
-  onCanvasScaleEnd(ScaleEndDetails details) {
+  void onCanvasScaleEnd(ScaleEndDetails details) {
     if (canUpdateCanvasModel) {
       _updateCanvasModelWithLastValues();
     }
@@ -74,14 +74,14 @@ mixin CanvasControlPolicy on BasePolicySet {
     canvasWriter.state.updateCanvas();
   }
 
-  _updateCanvasModelWithLastValues() {
+  void _updateCanvasModelWithLastValues() {
     canvasWriter.state
         .setPosition((_basePosition * transformScale) + transformPosition);
     canvasWriter.state.setScale(transformScale * _baseScale);
     canUpdateCanvasModel = false;
   }
 
-  onCanvasPointerSignal(PointerSignalEvent event) {
+  void onCanvasPointerSignal(PointerSignalEvent event) {
     if (event is PointerScrollEvent) {
       double scaleChange = event.scrollDelta.dy < 0
           ? (1 / canvasReader.state.mouseScaleSpeed)
@@ -166,7 +166,7 @@ mixin CanvasMovePolicy on BasePolicySet implements CanvasControlPolicy {
   }
 
   @override
-  onCanvasScaleUpdate(ScaleUpdateDetails details) {
+  void onCanvasScaleUpdate(ScaleUpdateDetails details) {
     if (canUpdateCanvasModel) {
       _animationController?.repeat();
       _updateCanvasModelWithLastValues();
@@ -180,7 +180,7 @@ mixin CanvasMovePolicy on BasePolicySet implements CanvasControlPolicy {
   }
 
   @override
-  onCanvasScaleEnd(ScaleEndDetails details) {
+  void onCanvasScaleEnd(ScaleEndDetails details) {
     if (canUpdateCanvasModel) {
       _updateCanvasModelWithLastValues();
     }
@@ -193,13 +193,13 @@ mixin CanvasMovePolicy on BasePolicySet implements CanvasControlPolicy {
   }
 
   @override
-  _updateCanvasModelWithLastValues() {
+  void _updateCanvasModelWithLastValues() {
     canvasWriter.state.setPosition(_basePosition + transformPosition);
     canUpdateCanvasModel = false;
   }
 
   @override
-  onCanvasPointerSignal(PointerSignalEvent event) {}
+  void onCanvasPointerSignal(PointerSignalEvent event) {}
 
   @override
   double keepScaleInBounds(double scale, double canvasScale) {
