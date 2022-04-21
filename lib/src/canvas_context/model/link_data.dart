@@ -14,7 +14,7 @@ class LinkData with ChangeNotifier {
   final String targetComponentId;
 
   /// Defines link design such as color, width and arrowheads.
-  final LinkStyle linkStyle;
+  LinkStyle linkStyle;
 
   /// Points from which the link is drawn on canvas.
   ///
