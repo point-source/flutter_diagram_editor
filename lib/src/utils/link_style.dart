@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:diagram_editor/src/utils/vector_utils.dart';
 import 'package:flutter/material.dart';
+
+import 'package:diagram_editor/src/utils/vector_utils.dart';
 
 enum ArrowType {
   none,
@@ -21,32 +22,32 @@ class LinkStyle {
   /// Defines the design of the link's line.
   ///
   /// It can be [LineType.solid], [LineType.dashed] or [LineType.dotted].
-  LineType lineType;
+  final LineType lineType;
 
   /// Defines the design of the link's front arrowhead.
   ///
   /// There are several designs, choose from [ArrowType] enum.
-  ArrowType arrowType;
+  final ArrowType arrowType;
 
   /// Defines the design of the link's back arrowhead.
   ///
   /// There are several designs, choose from [ArrowType] enum.
-  ArrowType backArrowType;
+  final ArrowType backArrowType;
 
   /// Defines the size of the link's front arrowhead.
-  double arrowSize;
+  final double arrowSize;
 
   /// Defines the size of the link's back arrowhead.
-  double backArrowSize;
+  final double backArrowSize;
 
   /// Defines the width of the link's line.
-  double lineWidth;
+  final double lineWidth;
 
   /// Defines the color of the link's line and both arrowheads.
-  Color color;
+  final Color color;
 
   /// Defines a visual design of a link on the canvas.
-  LinkStyle({
+  const LinkStyle({
     this.lineType = LineType.solid,
     this.arrowType = ArrowType.none,
     this.backArrowType = ArrowType.none,
@@ -275,4 +276,24 @@ class LinkStyle {
         'line_width': lineWidth,
         'color': color.toString().split('(0x')[1].split(')')[0],
       };
+
+  LinkStyle copyWith({
+    LineType? lineType,
+    ArrowType? arrowType,
+    ArrowType? backArrowType,
+    double? arrowSize,
+    double? backArrowSize,
+    double? lineWidth,
+    Color? color,
+  }) {
+    return LinkStyle(
+      lineType: lineType ?? this.lineType,
+      arrowType: arrowType ?? this.arrowType,
+      backArrowType: backArrowType ?? this.backArrowType,
+      arrowSize: arrowSize ?? this.arrowSize,
+      backArrowSize: backArrowSize ?? this.backArrowSize,
+      lineWidth: lineWidth ?? this.lineWidth,
+      color: color ?? this.color,
+    );
+  }
 }

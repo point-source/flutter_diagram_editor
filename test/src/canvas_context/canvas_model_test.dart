@@ -57,7 +57,7 @@ void main() {
         String linkId = model.connectTwoComponents(
           componentDataA.id,
           componentDataB.id,
-          LinkStyle(),
+          const LinkStyle(),
           null,
         );
 
@@ -93,7 +93,7 @@ void main() {
         String linkId = model.connectTwoComponents(
           componentDataA.id,
           componentDataB.id,
-          LinkStyle(),
+          const LinkStyle(),
           null,
         );
 
@@ -126,13 +126,13 @@ void main() {
         model.connectTwoComponents(
           componentDataA.id,
           componentDataC.id,
-          LinkStyle(),
+          const LinkStyle(),
           null,
         );
         model.connectTwoComponents(
           componentDataC.id,
           componentDataB.id,
-          LinkStyle(),
+          const LinkStyle(),
           null,
         );
 

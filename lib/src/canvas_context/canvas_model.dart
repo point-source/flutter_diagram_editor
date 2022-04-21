@@ -142,7 +142,7 @@ class CanvasModel with ChangeNotifier {
   String connectTwoComponents(
     String sourceComponentId,
     String targetComponentId,
-    LinkStyle? linkStyle,
+    LinkStyle linkStyle,
     dynamic data,
   ) {
     var linkId = _uuid.v4();
@@ -181,7 +181,7 @@ class CanvasModel with ChangeNotifier {
         targetComponent.position +
             targetComponent.getPointOnComponent(targetLinkAlignment),
       ],
-      linkStyle: linkStyle ?? LinkStyle(),
+      linkStyle: linkStyle,
       data: data,
     );
 

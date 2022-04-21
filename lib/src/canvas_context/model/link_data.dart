@@ -32,10 +32,10 @@ class LinkData with ChangeNotifier {
     required this.id,
     required this.sourceComponentId,
     required this.targetComponentId,
-    LinkStyle? linkStyle,
+    this.linkStyle = const LinkStyle(),
     required this.linkPoints,
     this.data,
-  }) : linkStyle = linkStyle ?? LinkStyle();
+  });
 
   /// Updates this link on the canvas.
   ///

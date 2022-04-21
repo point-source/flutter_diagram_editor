@@ -367,7 +367,7 @@ mixin ConnectionWriter on ModelWriter {
   String connectTwoComponents({
     required String sourceComponentId,
     required String targetComponentId,
-    LinkStyle? linkStyle,
+    LinkStyle linkStyle = const LinkStyle(),
     dynamic data,
   }) {
     assert(_canvasModel.componentExists(sourceComponentId));

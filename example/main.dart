@@ -208,7 +208,7 @@ mixin MyComponentPolicy implements ComponentPolicy, CustomPolicy {
     canvasWriter.model.connectTwoComponents(
       sourceComponentId: sourceComponentId,
       targetComponentId: targetComponentId,
-      linkStyle: LinkStyle(
+      linkStyle: const LinkStyle(
         arrowType: ArrowType.pointedArrow,
         lineWidth: 1.5,
         backArrowType: ArrowType.centerCircle,
