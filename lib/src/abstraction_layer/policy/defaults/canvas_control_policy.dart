@@ -21,7 +21,7 @@ mixin CanvasControlPolicy on BasePolicySet {
 
   bool canUpdateCanvasModel = false;
 
-  getAnimationController() {
+  AnimationController? getAnimationController() {
     return _animationController;
   }
 

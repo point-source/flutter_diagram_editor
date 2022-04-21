@@ -131,9 +131,11 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
   }
 
   Widget canvasAnimated(CanvasModel canvasModel) {
+    final _animationController = withControlPolicy?.getAnimationController();
+    if (_animationController == null) return canvasStack(canvasModel);
+
     return AnimatedBuilder(
-      animation:
-          (withControlPolicy as CanvasControlPolicy).getAnimationController(),
+      animation: _animationController,
       builder: (BuildContext context, Widget? child) {
         (withControlPolicy as CanvasControlPolicy).canUpdateCanvasModel = true;
 
@@ -167,7 +169,7 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
             child: Container(
               color: canvasState.color,
               child: ClipRect(
-                child: (withControlPolicy != null)
+                child: (withControlPolicy?.getAnimationController() != null)
                     ? canvasAnimated(canvasModel)
                     : canvasStack(canvasModel),
               ),
