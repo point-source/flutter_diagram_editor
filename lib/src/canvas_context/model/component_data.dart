@@ -48,7 +48,7 @@ class ComponentData with ChangeNotifier {
   final Object? data;
 
   /// Casts the dynamic data field to a type passed to the generic to preserve typesafety
-  T? typedData<T>() => data as T?;
+  T? typedData<T extends Object>() => data as T?;
 
   /// Represents data of a component in the model.
   ComponentData({
