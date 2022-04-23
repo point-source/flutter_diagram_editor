@@ -25,7 +25,10 @@ class LinkData with ChangeNotifier {
   bool areJointsVisible = false;
 
   /// Dynamic data for you to define your own data for this link.
-  dynamic data;
+  Object? data;
+
+  /// Casts the dynamic data field to a type passed to the generic to preserve typesafety
+  T? typedData<T extends Object>() => data as T?;
 
   /// Represents data of a link/connection in the model.
   LinkData({
@@ -177,6 +180,34 @@ class LinkData with ChangeNotifier {
         'target_component_id': targetComponentId,
         'link_style': linkStyle,
         'link_points': linkPoints.map((point) => [point.dx, point.dy]).toList(),
-        'dynamic_data': data?.toJson(),
+        'dynamic_data': _dataToJson(data),
       };
+
+  dynamic _dataToJson(dynamic data) {
+    switch (data.runtimeType) {
+      case String:
+      case int:
+      case double:
+      case Null:
+        return data;
+      default:
+        if (data is Iterable) {
+          return data.map(_dataToJson);
+        }
+        if (data is Map<String, dynamic>) {
+          return data.map((key, value) => MapEntry(key, _dataToJson(value)));
+        }
+        try {
+          final map = data?.toMap();
+          if (map is Map) return map;
+        } on NoSuchMethodError {
+          try {
+            final json = data?.toJson();
+            if (json is Map) return json;
+          } on NoSuchMethodError {
+            return data;
+          }
+        }
+    }
+  }
 }

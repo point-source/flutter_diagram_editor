@@ -227,8 +227,8 @@ mixin CustomPolicy implements PolicySet {
   highlightComponent(String componentId) {
     canvasReader.model
         .getComponent(componentId)
-        .dataTyped<MyComponentData>()
-        .showHighlight();
+        .typedData<MyComponentData>()
+        ?.showHighlight();
     canvasReader.model.getComponent(componentId).updateComponent();
     selectedComponentId = componentId;
   }
@@ -237,8 +237,8 @@ mixin CustomPolicy implements PolicySet {
     if (componentId != null) {
       canvasReader.model
           .getComponent(componentId)
-          .dataTyped<MyComponentData>()
-          .hideHighlight();
+          .typedData<MyComponentData>()
+          ?.hideHighlight();
       canvasReader.model.getComponent(componentId).updateComponent();
       selectedComponentId = null;
     }
