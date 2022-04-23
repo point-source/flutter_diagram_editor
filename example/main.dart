@@ -225,14 +225,20 @@ mixin CustomPolicy implements PolicySet {
   String serializedDiagram = '{"components": [], "links": []}';
 
   highlightComponent(String componentId) {
-    canvasReader.model.getComponent(componentId).data.showHighlight();
+    canvasReader.model
+        .getComponent(componentId)
+        .dataTyped<MyComponentData>()
+        .showHighlight();
     canvasReader.model.getComponent(componentId).updateComponent();
     selectedComponentId = componentId;
   }
 
   hideComponentHighlight(String? componentId) {
     if (componentId != null) {
-      canvasReader.model.getComponent(componentId).data.hideHighlight();
+      canvasReader.model
+          .getComponent(componentId)
+          .dataTyped<MyComponentData>()
+          .hideHighlight();
       canvasReader.model.getComponent(componentId).updateComponent();
       selectedComponentId = null;
     }
