@@ -17,7 +17,6 @@ void main() {
     );
 
     ComponentData componentData = ComponentData();
-    ComponentData componentData2 = ComponentData();
 
     testWidgets(
       'Given new canvas When no action Then canvas contains no components',
@@ -47,26 +46,6 @@ void main() {
         expect(find.byType(Component), findsOneWidget);
 
         policySet.canvasWriter.model.removeComponent(componentData.id);
-
-        await tester.pump();
-        expect(find.byType(Component), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'Given canvas with one component with a child When component is removed with children Then canvas contains no components',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(editor);
-
-        String id1 = policySet.canvasWriter.model.addComponent(componentData);
-        String id2 = policySet.canvasWriter.model.addComponent(componentData2);
-        policySet.canvasWriter.model.setComponentParent(id2, id1);
-
-        await tester.pump();
-
-        expect(find.byType(Component), findsNWidgets(2));
-
-        policySet.canvasWriter.model.removeComponentWithChildren(id1);
 
         await tester.pump();
         expect(find.byType(Component), findsNothing);

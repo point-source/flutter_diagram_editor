@@ -45,18 +45,6 @@ class ComponentData with ChangeNotifier {
   /// Higher value means on the top.
   int zOrder = 0;
 
-  /// Assigned parent to this component.
-  ///
-  /// Use for hierarchical components.
-  /// Functions such as [moveComponentWithChildren] work with this property.
-  String parentId = '';
-
-  /// List of children of this component.
-  ///
-  /// Use for hierarchical components.
-  /// Functions such as [moveComponentWithChildren] work with this property.
-  final List<String> childrenIds = [];
-
   /// Defines to which components is this components connected and what is the [connectionId].
   ///
   /// The connection can be [ConnectionOut] for link going from this component
@@ -132,38 +120,6 @@ class ComponentData with ChangeNotifier {
     );
   }
 
-  /// Sets the component's parent.
-  ///
-  /// It's not possible to make a parent-child loop. (its ancestor cannot be its child)
-  ///
-  /// You should use it only with [addChild] on the parent's component.
-  void setParent(String parentId) {
-    this.parentId = parentId;
-  }
-
-  /// Removes parent's id from this component data.
-  ///
-  /// You should use it only with [removeChild] on the parent's component.
-  void removeParent() {
-    parentId = '';
-  }
-
-  /// Sets the component's parent.
-  ///
-  /// It's not possible to make a parent-child loop. (its ancestor cannot be its child)
-  ///
-  /// You should use it only with [setParent] on the child's component.
-  void addChild(String childId) {
-    childrenIds.add(childId);
-  }
-
-  /// Removes child's id from children.
-  ///
-  /// You should use it only with [removeParent] on the child's component.
-  void removeChild(String childId) {
-    childrenIds.remove(childId);
-  }
-
   @override
   String toString() {
     return 'Component data ($id), position: $position';
@@ -178,13 +134,7 @@ class ComponentData with ChangeNotifier {
         minSize = Size(json['min_size'][0], json['min_size'][1]),
         type = json['type'],
         zOrder = json['z_order'],
-        parentId = json['parent_id'],
         data = decodeCustomComponentData?.call(json['dynamic_data']) {
-    childrenIds.addAll((json['children_ids'] as List)
-        .map(
-          (id) => id as String,
-        )
-        .toList());
     connections.addAll((json['connections'] as List)
         .map((connectionJson) => Connection.fromJson(connectionJson)));
   }
@@ -196,8 +146,6 @@ class ComponentData with ChangeNotifier {
         'min_size': [minSize.width, minSize.height],
         'type': type,
         'z_order': zOrder,
-        'parent_id': parentId,
-        'children_ids': childrenIds,
         'connections': connections,
         'dynamic_data': _dataToJson(data),
       };
