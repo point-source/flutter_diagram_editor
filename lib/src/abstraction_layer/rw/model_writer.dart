@@ -112,7 +112,7 @@ mixin ComponentWriter on ModelWriter {
   void setComponentPosition(String componentId, Offset position) {
     assert(_canvasModel.componentExists(componentId),
         'model does not contain this component id: $componentId');
-    _canvasModel.getComponent(componentId).setPosition(position);
+    _canvasModel.getComponent(componentId).position = position;
     _canvasModel.updateLinks(componentId);
   }
 
@@ -217,7 +217,7 @@ mixin ComponentWriter on ModelWriter {
   void setComponentSize(String componentId, Size size) {
     assert(_canvasModel.componentExists(componentId),
         'model does not contain this component id: $componentId');
-    _canvasModel.getComponent(componentId).setSize(size);
+    _canvasModel.getComponent(componentId).size = size;
   }
 
   /// Sets the component's parent.

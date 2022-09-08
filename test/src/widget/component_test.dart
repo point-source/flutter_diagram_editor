@@ -50,7 +50,7 @@ void main() {
 
         expect(find.byType(Component), findsOneWidget);
 
-        componentData.setPosition(const Offset(0, 10));
+        componentData.position = const Offset(0, 10);
 
         await tester.pump();
 

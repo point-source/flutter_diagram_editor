@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:diagram_editor/src/canvas_context/model/connection.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -7,14 +9,31 @@ class ComponentData with ChangeNotifier {
   final String id;
 
   /// Position on the canvas.
-  Offset position;
+  Offset get position => _position;
+
+  set position(Offset position) {
+    _position = position;
+    notifyListeners();
+  }
+
+  Offset _position;
 
   /// Size of the component.
-  Size size;
+  Size get size => _size;
 
-  /// Minimal size of a component.
+  set size(Size size) {
+    _size = Size(
+      max(size.width, minSize.width),
+      max(size.height, minSize.height),
+    );
+    notifyListeners();
+  }
+
+  Size _size;
+
+  /// Minimum size of the component.
   ///
-  /// When [resizeDelta] is called the size will not go under this value.
+  /// Size will be prevented from being set lower than this value.
   final Size minSize;
 
   /// Component type to distinguish components.
@@ -50,13 +69,15 @@ class ComponentData with ChangeNotifier {
   /// Represents data of a component in the model.
   ComponentData({
     String? id,
-    this.position = Offset.zero,
-    this.size = const Size(80, 80),
+    Offset position = Offset.zero,
+    Size size = const Size(80, 80),
     this.minSize = const Size(4, 4),
     this.type = '',
     this.data,
   })  : assert(minSize <= size),
-        id = id ?? const Uuid().v4();
+        id = id ?? const Uuid().v4(),
+        _position = position,
+        _size = size;
 
   /// Updates this component on the canvas.
   ///
@@ -64,21 +85,10 @@ class ComponentData with ChangeNotifier {
   /// Usually this is already called in most functions such as [move] or [setSize] so it's not necessary to call it again.
   ///
   /// It calls [notifyListeners] function of [ChangeNotifier].
-  void updateComponent() {
-    notifyListeners();
-  }
+  void updateComponent() => notifyListeners();
 
   /// Translates the component by [offset] value.
-  void move(Offset offset) {
-    position += offset;
-    notifyListeners();
-  }
-
-  /// Sets the position of the component to [position] value.
-  void setPosition(Offset position) {
-    this.position = position;
-    notifyListeners();
-  }
+  void move(Offset offset) => position += offset;
 
   /// Adds new connection to this component.
   ///
@@ -106,13 +116,6 @@ class ComponentData with ChangeNotifier {
       tempSize = Size(tempSize.width, minSize.height);
     }
     size = tempSize;
-    notifyListeners();
-  }
-
-  /// Sets the component's to [size].
-  void setSize(Size size) {
-    this.size = size;
-    notifyListeners();
   }
 
   /// Returns Offset position on this component from [alignment].
@@ -170,8 +173,8 @@ class ComponentData with ChangeNotifier {
     Map<String, dynamic> json, {
     Function(Map<String, dynamic> json)? decodeCustomComponentData,
   })  : id = json['id'],
-        position = Offset(json['position'][0], json['position'][1]),
-        size = Size(json['size'][0], json['size'][1]),
+        _position = Offset(json['position'][0], json['position'][1]),
+        _size = Size(json['size'][0], json['size'][1]),
         minSize = Size(json['min_size'][0], json['min_size'][1]),
         type = json['type'],
         zOrder = json['z_order'],
