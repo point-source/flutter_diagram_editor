@@ -9,10 +9,10 @@ class DiagramApp extends StatefulWidget {
   const DiagramApp({Key? key}) : super(key: key);
 
   @override
-  _DiagramAppState createState() => _DiagramAppState();
+  DiagramAppState createState() => DiagramAppState();
 }
 
-class _DiagramAppState extends State<DiagramApp> {
+class DiagramAppState extends State<DiagramApp> {
   MyPolicySet myPolicySet = MyPolicySet();
 
   @override
@@ -36,7 +36,8 @@ class _DiagramAppState extends State<DiagramApp> {
                   children: [
                     ElevatedButton(
                       onPressed: () => myPolicySet.deleteAllComponents(),
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
                       child: const Text('delete all'),
                     ),
                     const Spacer(),
