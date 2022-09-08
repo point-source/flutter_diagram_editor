@@ -1,7 +1,15 @@
 import 'package:diagram_editor/diagram_editor.dart';
-import 'package:diagram_editor/src/widget/component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+class ComponentData extends BaseComponentData {
+  ComponentData({
+    super.id,
+    super.position,
+    super.size,
+    super.minSize,
+  });
+}
 
 void main() {
   // Tests can be run only all at once, not individually !!!
@@ -16,13 +24,13 @@ void main() {
       ),
     );
 
-    ComponentData componentData = ComponentData();
+    final componentData = ComponentData();
 
     testWidgets(
       'Given new canvas When no action Then canvas contains no components',
       (WidgetTester tester) async {
         await tester.pumpWidget(editor);
-        expect(find.byType(Component), findsNothing);
+        expect(find.byType(ComponentData), findsNothing);
       },
     );
 
@@ -34,7 +42,7 @@ void main() {
         policySet.canvasWriter.model.addComponent(componentData);
 
         await tester.pump();
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
       },
     );
 
@@ -43,12 +51,12 @@ void main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(editor);
 
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
 
         policySet.canvasWriter.model.removeComponent(componentData.id);
 
         await tester.pump();
-        expect(find.byType(Component), findsNothing);
+        expect(find.byType(ComponentData), findsNothing);
       },
     );
 
@@ -64,7 +72,7 @@ void main() {
 
         await tester.pump();
 
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
       },
     );
 
@@ -77,7 +85,7 @@ void main() {
 
         await tester.pump();
 
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
       },
     );
 
@@ -90,7 +98,7 @@ void main() {
 
         await tester.pump();
 
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
       },
     );
 
@@ -103,7 +111,7 @@ void main() {
 
         await tester.pump();
 
-        expect(find.byType(Component), findsOneWidget);
+        expect(find.byType(ComponentData), findsOneWidget);
       },
     );
   });

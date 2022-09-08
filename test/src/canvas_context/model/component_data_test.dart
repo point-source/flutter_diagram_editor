@@ -3,6 +3,15 @@ import 'package:diagram_editor/src/canvas_context/model/connection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+class ComponentData extends BaseComponentData {
+  ComponentData({
+    super.id,
+    super.position,
+    super.size,
+    super.minSize,
+  });
+}
+
 void main() {
   group('Component data tests', () {
     test(

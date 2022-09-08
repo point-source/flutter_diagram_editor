@@ -61,13 +61,21 @@ class DiagramAppState extends State<DiagramApp> {
   }
 }
 
-// Custom component Data which you can assign to a component to dynamic data property.
-class MyComponentData {
-  MyComponentData();
+class ComponentData extends BaseComponentData {
+  ComponentData(
+      {super.id,
+      super.position,
+      super.size,
+      super.minSize,
+      super.zOrder,
+      this.isHighlightVisible = false,
+      Color? color})
+      : color = color ??
+            Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                .withOpacity(1.0);
 
-  bool isHighlightVisible = false;
-  Color color =
-      Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+  bool isHighlightVisible;
+  Color color;
 
   showHighlight() {
     isHighlightVisible = true;
@@ -78,13 +86,24 @@ class MyComponentData {
   }
 
   // Function used to deserialize the diagram. Must be passed to `canvasWriter.model.deserializeDiagram` for proper deserialization.
-  MyComponentData.fromJson(Map<String, dynamic> json)
-      : isHighlightVisible = json['highlight'],
-        color = Color(int.parse(json['color'], radix: 16));
+  factory ComponentData.fromJson(Map<String, dynamic> json) {
+    return ComponentData(
+      id: json['id'],
+      position: Offset(json['position'][0], json['position'][1]),
+      size: Size(json['size'][0], json['size'][1]),
+      minSize: Size(json['min_size'][0], json['min_size'][1]),
+      zOrder: json['z_order'],
+      isHighlightVisible: json['isHighlightVisible'],
+      color: Color(int.parse(json['color'], radix: 16)),
+    )..connections.addAll((json['connections'] as List)
+        .map((connectionJson) => Connection.fromJson(connectionJson)));
+  }
 
   // Function used to serialization of the diagram. E.g. to save to a file.
+  @override
   Map<String, dynamic> toJson() => {
-        'highlight': isHighlightVisible,
+        ...super.toJson(),
+        'isHighlightVisible': isHighlightVisible,
         'color': color.toString().split('(0x')[1].split(')')[0],
       };
 }
@@ -97,7 +116,6 @@ class MyPolicySet extends PolicySet
         MyCanvasPolicy,
         MyComponentPolicy,
         CustomPolicy,
-        //
         CanvasControlPolicy,
         LinkControlPolicy,
         LinkJointControlPolicy,
@@ -115,15 +133,14 @@ mixin MyInitPolicy implements InitPolicy {
 // Use switch on componentData.type or componentData.data to define different component designs.
 mixin MyComponentDesignPolicy implements ComponentDesignPolicy {
   @override
-  Widget showComponentBody(ComponentData componentData) {
+  Widget showComponentBody(BaseComponentData componentData) {
+    componentData = componentData as ComponentData;
     return Container(
       decoration: BoxDecoration(
-        color: (componentData.data as MyComponentData).color,
+        color: componentData.color,
         border: Border.all(
           width: 2,
-          color: (componentData.data as MyComponentData).isHighlightVisible
-              ? Colors.pink
-              : Colors.black,
+          color: componentData.isHighlightVisible ? Colors.pink : Colors.black,
         ),
       ),
       child: const Center(child: Text('component')),
@@ -145,7 +162,6 @@ mixin MyCanvasPolicy implements CanvasPolicy, CustomPolicy {
           size: const Size(96, 72),
           position:
               canvasReader.state.fromCanvasCoordinates(details.localPosition),
-          data: MyComponentData(),
         ),
       );
     }
@@ -226,17 +242,19 @@ mixin CustomPolicy implements PolicySet {
   String serializedDiagram = '{"components": [], "links": []}';
 
   highlightComponent(String componentId) {
-    (canvasReader.model.getComponent(componentId).data as MyComponentData?)
-        ?.showHighlight();
-    canvasReader.model.getComponent(componentId).updateComponent();
+    final componentData =
+        canvasReader.model.getComponent(componentId) as ComponentData;
+    componentData.showHighlight();
+    componentData.updateComponent();
     selectedComponentId = componentId;
   }
 
   hideComponentHighlight(String? componentId) {
     if (componentId != null) {
-      (canvasReader.model.getComponent(componentId).data as MyComponentData?)
-          ?.hideHighlight();
-      canvasReader.model.getComponent(componentId).updateComponent();
+      final componentData =
+          canvasReader.model.getComponent(componentId) as ComponentData;
+      componentData.hideHighlight();
+      componentData.updateComponent();
       selectedComponentId = null;
     }
   }
@@ -256,7 +274,7 @@ mixin CustomPolicy implements PolicySet {
     canvasWriter.model.removeAllComponents();
     canvasWriter.model.deserializeDiagram(
       serializedDiagram,
-      decodeCustomComponentData: (json) => MyComponentData.fromJson(json),
+      ComponentData.fromJson,
       decodeCustomLinkData: null,
     );
   }

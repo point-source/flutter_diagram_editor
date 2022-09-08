@@ -1,7 +1,7 @@
 import 'package:diagram_editor/diagram_editor.dart';
 
 class DiagramData {
-  final List<ComponentData> components;
+  final List<BaseComponentData> components;
   final List<LinkData> links;
 
   /// Contains list of all components and list of all links of the diagram
@@ -11,14 +11,11 @@ class DiagramData {
   });
 
   DiagramData.fromJson(
-    Map<String, dynamic> json, {
-    Function(Map<String, dynamic> json)? decodeCustomComponentData,
+    Map<String, dynamic> json,
+    BaseComponentData Function(Map<String, dynamic> json) decodeComponentData, {
     Function(Map<String, dynamic> json)? decodeCustomLinkData,
   })  : components = (json['components'] as List)
-            .map((componentJson) => ComponentData.fromJson(
-                  componentJson,
-                  decodeCustomComponentData: decodeCustomComponentData,
-                ))
+            .map((componentJson) => decodeComponentData(componentJson))
             .toList(),
         links = (json['links'] as List)
             .map((linkJson) => LinkData.fromJson(

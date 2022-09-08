@@ -2,6 +2,15 @@ import 'package:diagram_editor/diagram_editor.dart';
 import 'package:diagram_editor/src/canvas_context/canvas_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+class ComponentData extends BaseComponentData {
+  ComponentData({
+    super.id,
+    super.position,
+    super.size,
+    super.minSize,
+  });
+}
+
 void main() {
   group('Canvas model tests', () {
     test(
@@ -19,7 +28,7 @@ void main() {
       () {
         PolicySet policySet = PolicySet();
         var model = CanvasModel(policySet);
-        ComponentData componentData = ComponentData();
+        final componentData = ComponentData();
 
         model.addComponent(componentData);
 
@@ -32,7 +41,7 @@ void main() {
       () {
         PolicySet policySet = PolicySet();
         var model = CanvasModel(policySet);
-        ComponentData componentData = ComponentData();
+        final componentData = ComponentData();
 
         String componentId = model.addComponent(componentData);
 
@@ -48,8 +57,8 @@ void main() {
         PolicySet policySet = PolicySet();
         var model = CanvasModel(policySet);
 
-        ComponentData componentDataA = ComponentData();
-        ComponentData componentDataB = ComponentData();
+        final componentDataA = ComponentData();
+        final componentDataB = ComponentData();
 
         model.addComponent(componentDataA);
         model.addComponent(componentDataB);
@@ -84,8 +93,8 @@ void main() {
         PolicySet policySet = PolicySet();
         var model = CanvasModel(policySet);
 
-        ComponentData componentDataA = ComponentData();
-        ComponentData componentDataB = ComponentData();
+        final componentDataA = ComponentData();
+        final componentDataB = ComponentData();
 
         model.addComponent(componentDataA);
         model.addComponent(componentDataB);
@@ -115,9 +124,9 @@ void main() {
         PolicySet policySet = PolicySet();
         var model = CanvasModel(policySet);
 
-        ComponentData componentDataA = ComponentData();
-        ComponentData componentDataB = ComponentData();
-        ComponentData componentDataC = ComponentData();
+        final componentDataA = ComponentData();
+        final componentDataB = ComponentData();
+        final componentDataC = ComponentData();
 
         model.addComponent(componentDataA);
         model.addComponent(componentDataB);

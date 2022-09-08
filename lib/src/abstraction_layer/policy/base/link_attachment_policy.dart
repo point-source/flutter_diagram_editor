@@ -7,7 +7,7 @@ mixin LinkAttachmentPolicy on BasePolicySet {
   ///
   /// With no implementation the link will attach to center of the component.
   Alignment getLinkEndpointAlignment(
-    ComponentData componentData,
+    BaseComponentData componentData,
     Offset targetPoint,
   ) {
     return Alignment.center;

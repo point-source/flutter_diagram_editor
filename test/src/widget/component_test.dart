@@ -6,6 +6,15 @@ import 'package:diagram_editor/src/widget/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+class ComponentData extends BaseComponentData {
+  ComponentData({
+    super.id,
+    super.position,
+    super.size,
+    super.minSize,
+  });
+}
+
 void main() {
   // Tests can be run only all at once, not individually !!!
   group('Component widget tests', () {

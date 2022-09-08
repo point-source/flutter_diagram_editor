@@ -4,7 +4,19 @@ import 'package:diagram_editor/src/canvas_context/model/connection.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class ComponentData with ChangeNotifier {
+class BaseComponentData with ChangeNotifier {
+  /// Represents data of a component in the model.
+  BaseComponentData({
+    String? id,
+    Offset position = Offset.zero,
+    Size size = const Size(80, 80),
+    this.minSize = const Size(4, 4),
+    this.zOrder = 0,
+  })  : assert(minSize <= size),
+        id = id ?? const Uuid().v4(),
+        _position = position,
+        _size = size;
+
   /// Unique id of this component.
   final String id;
 
@@ -36,36 +48,15 @@ class ComponentData with ChangeNotifier {
   /// Size will be prevented from being set lower than this value.
   final Size minSize;
 
-  /// Component type to distinguish components.
-  ///
-  /// You can use it for example to distinguish what [data] type this component has.
-  final String type;
-
   /// This value determines if this component will be above or under other components.
   /// Higher value means on the top.
-  int zOrder = 0;
+  int zOrder;
 
   /// Defines to which components is this components connected and what is the [connectionId].
   ///
   /// The connection can be [ConnectionOut] for link going from this component
   /// or [ConnectionIn] for link going from another to this component.
   final List<Connection> connections = [];
-
-  /// Dynamic data for you to define your own data for this component.
-  final Object? data;
-
-  /// Represents data of a component in the model.
-  ComponentData({
-    String? id,
-    Offset position = Offset.zero,
-    Size size = const Size(80, 80),
-    this.minSize = const Size(4, 4),
-    this.type = '',
-    this.data,
-  })  : assert(minSize <= size),
-        id = id ?? const Uuid().v4(),
-        _position = position,
-        _size = size;
 
   /// Updates this component on the canvas.
   ///
@@ -125,16 +116,14 @@ class ComponentData with ChangeNotifier {
     return 'Component data ($id), position: $position';
   }
 
-  ComponentData.fromJson(
+  BaseComponentData.fromJson(
     Map<String, dynamic> json, {
     Function(Map<String, dynamic> json)? decodeCustomComponentData,
   })  : id = json['id'],
         _position = Offset(json['position'][0], json['position'][1]),
         _size = Size(json['size'][0], json['size'][1]),
         minSize = Size(json['min_size'][0], json['min_size'][1]),
-        type = json['type'],
-        zOrder = json['z_order'],
-        data = decodeCustomComponentData?.call(json['dynamic_data']) {
+        zOrder = json['z_order'] {
     connections.addAll((json['connections'] as List)
         .map((connectionJson) => Connection.fromJson(connectionJson)));
   }
@@ -144,37 +133,8 @@ class ComponentData with ChangeNotifier {
         'position': [position.dx, position.dy],
         'size': [size.width, size.height],
         'min_size': [minSize.width, minSize.height],
-        'type': type,
+        'runtimeType': runtimeType.toString(),
         'z_order': zOrder,
         'connections': connections,
-        'dynamic_data': _dataToJson(data),
       };
-
-  dynamic _dataToJson(dynamic data) {
-    switch (data.runtimeType) {
-      case String:
-      case int:
-      case double:
-      case Null:
-        return data;
-      default:
-        if (data is Iterable) {
-          return data.map(_dataToJson);
-        }
-        if (data is Map<String, dynamic>) {
-          return data.map((key, value) => MapEntry(key, _dataToJson(value)));
-        }
-        try {
-          final map = data?.toMap();
-          if (map is Map) return map;
-        } on NoSuchMethodError {
-          try {
-            final json = data?.toJson();
-            if (json is Map) return json;
-          } on NoSuchMethodError {
-            return data;
-          }
-        }
-    }
-  }
 }

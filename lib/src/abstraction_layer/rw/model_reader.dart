@@ -22,7 +22,7 @@ class CanvasModelReader {
   /// Returns a component with [id].
   ///
   /// If there is no component with [id] in the model, it returns null.
-  ComponentData getComponent(String id) {
+  BaseComponentData getComponent(String id) {
     assert(componentExist(id), 'model does not contain this component id: $id');
 
     return canvasModel.getComponent(id);
@@ -31,7 +31,7 @@ class CanvasModelReader {
   /// Returns all existing components in the model as a [HashMap].
   ///
   /// Key of the HashMap element is component's id.
-  HashMap<String, ComponentData> getAllComponents() {
+  HashMap<String, BaseComponentData> getAllComponents() {
     return canvasModel.getAllComponents();
   }
 

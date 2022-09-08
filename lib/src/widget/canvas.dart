@@ -54,7 +54,7 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
 
     return zOrderedComponents
         .map(
-          (componentData) => ChangeNotifierProvider<ComponentData>.value(
+          (componentData) => ChangeNotifierProvider<BaseComponentData>.value(
             value: componentData,
             child: Component(
               policy: widget.policy,
@@ -76,11 +76,11 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
   }
 
   List<Widget> showOtherWithComponentDataUnder(CanvasModel canvasModel) {
-    return canvasModel.components.values.map((ComponentData componentData) {
-      return ChangeNotifierProvider<ComponentData>.value(
+    return canvasModel.components.values.map((BaseComponentData componentData) {
+      return ChangeNotifierProvider<BaseComponentData>.value(
         value: componentData,
         builder: (context, child) {
-          return Consumer<ComponentData>(
+          return Consumer<BaseComponentData>(
             builder: (context, data, child) {
               return widget.policy
                   .showCustomWidgetWithComponentDataUnder(context, data);
@@ -92,11 +92,11 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
   }
 
   List<Widget> showOtherWithComponentDataOver(CanvasModel canvasModel) {
-    return canvasModel.components.values.map((ComponentData componentData) {
-      return ChangeNotifierProvider<ComponentData>.value(
+    return canvasModel.components.values.map((BaseComponentData componentData) {
+      return ChangeNotifierProvider<BaseComponentData>.value(
         value: componentData,
         builder: (context, child) {
-          return Consumer<ComponentData>(
+          return Consumer<BaseComponentData>(
             builder: (context, data, child) {
               return widget.policy
                   .showCustomWidgetWithComponentDataOver(context, data);

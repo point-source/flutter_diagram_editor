@@ -24,7 +24,7 @@ class CanvasModelWriter extends ModelWriter
   ///
   /// Returns component's id (if [componentData] doesn't contain id, new id if generated).
   /// Canvas is updated and this new components is shown on it.
-  String addComponent(ComponentData componentData) {
+  String addComponent(BaseComponentData componentData) {
     return _canvasModel.addComponent(componentData);
   }
 
@@ -60,13 +60,13 @@ class CanvasModelWriter extends ModelWriter
   /// The diagram may become unstable if any data are manipulated.
   /// Deleting existing diagram is recommended.
   void deserializeDiagram(
-    String json, {
-    Function(Map<String, dynamic> json)? decodeCustomComponentData,
+    String json,
+    BaseComponentData Function(Map<String, dynamic> json) decodeComponentData, {
     Function(Map<String, dynamic> json)? decodeCustomLinkData,
   }) {
     final diagram = DiagramData.fromJson(
       jsonDecode(json),
-      decodeCustomComponentData: decodeCustomComponentData,
+      decodeComponentData,
       decodeCustomLinkData: decodeCustomLinkData,
     );
     for (final componentData in diagram.components) {
@@ -83,7 +83,7 @@ class CanvasModelWriter extends ModelWriter
 mixin ComponentWriter on ModelWriter {
   /// Update a component with [componentId].
   ///
-  /// It calls [notifyListeners] function of [ChangeNotifier] on [ComponentData].
+  /// It calls [notifyListeners] function of [ChangeNotifier] on [BaseComponentData].
   void updateComponent(String componentId) {
     assert(_canvasModel.componentExists(componentId),
         'model does not contain this component id: $componentId');

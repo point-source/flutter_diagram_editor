@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class CanvasModel with ChangeNotifier {
   final Uuid _uuid = const Uuid();
-  HashMap<String, ComponentData> components = HashMap();
+  HashMap<String, BaseComponentData> components = HashMap();
   HashMap<String, LinkData> links = HashMap();
   PolicySet policySet;
 
@@ -32,11 +32,11 @@ class CanvasModel with ChangeNotifier {
     return components.containsKey(id);
   }
 
-  ComponentData getComponent(String id) {
+  BaseComponentData getComponent(String id) {
     return components[id]!;
   }
 
-  HashMap<String, ComponentData> getAllComponents() {
+  HashMap<String, BaseComponentData> getAllComponents() {
     return components;
   }
 
@@ -53,7 +53,7 @@ class CanvasModel with ChangeNotifier {
   }
 
   /// Returns componentData id. useful when the id is set automatically.
-  String addComponent(ComponentData componentData) {
+  String addComponent(BaseComponentData componentData) {
     components[componentData.id] = componentData;
     notifyListeners();
 
@@ -197,7 +197,7 @@ class CanvasModel with ChangeNotifier {
     for (var connection in component.connections) {
       var link = getLink(connection.connectionId);
 
-      ComponentData sourceComponent = component;
+      BaseComponentData sourceComponent = component;
       var targetComponent = getComponent(connection.otherComponentId);
 
       if (connection is ConnectionOut) {
@@ -230,8 +230,8 @@ class CanvasModel with ChangeNotifier {
   }
 
   Alignment _getLinkEndpointAlignment(
-    ComponentData component1,
-    ComponentData component2,
+    BaseComponentData component1,
+    BaseComponentData component2,
     LinkData link,
     int linkPointIndex,
   ) {
@@ -249,8 +249,8 @@ class CanvasModel with ChangeNotifier {
   // ignore: long-parameter-list
   void _setLinkEndpoints(
     LinkData link,
-    ComponentData component1,
-    ComponentData component2,
+    BaseComponentData component1,
+    BaseComponentData component2,
     Alignment alignment1,
     Alignment alignment2,
   ) {

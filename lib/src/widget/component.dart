@@ -16,7 +16,7 @@ class Component extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final componentData = Provider.of<ComponentData>(context);
+    final componentData = Provider.of<BaseComponentData>(context);
     final canvasState = Provider.of<CanvasState>(context);
 
     return Positioned(
